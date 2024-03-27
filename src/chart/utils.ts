@@ -1,16 +1,11 @@
-import { format } from 'date-fns';
+import { sortNumbers } from '../utils/array.utils';
 import { ChartData, Series } from './types';
 
-export const formatTimestamp = (timestampMs: number) =>
-  format(new Date(timestampMs), 'dd.MM HH:mm');
+export const getUniqueTimestamps = (chartSeries: Series[]) : number[] => [...new Set(
+  chartSeries.flatMap(({ data }) => data.flatMap(({ date }) => date))
+)]
 
-const sortNumbers = (array: number[]) => array.sort((a, b) => a - b);
-
-export const getCharData = (chartSeries: Series[]): ChartData => {
-  const uniqueTimestamps = new Set(
-    chartSeries.flatMap(({ data }) => data.flatMap(({ date }) => date))
-  );
-
+export const getCharData = (chartSeries: Series[], uniqueTimestamps: number[]): ChartData => {
   const seriesDataRecords: Record<
     string,
     Record<number, number>
@@ -25,7 +20,7 @@ export const getCharData = (chartSeries: Series[]): ChartData => {
     {}
   );
 
-  const data: ChartData = sortNumbers([...uniqueTimestamps]).map((date) => {
+  const data: ChartData = sortNumbers(uniqueTimestamps).map((date) => {
     const d: ChartData[number] = Object.keys(seriesDataRecords).reduce(
       (p, c) => ({ ...p, [c]: seriesDataRecords[c][date] || null }),
       {}

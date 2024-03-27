@@ -1,10 +1,10 @@
 import { Chart } from './chart';
-import { series } from './chart/data';
+import { limitations, series } from './chart/data';
 
 function App() {
   return (
     <>
-      <Chart chartSeries={series} />
+      <Chart chartSeries={series} limitations={limitations} />
     </>
   );
 }

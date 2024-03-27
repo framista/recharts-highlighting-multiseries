@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   LineChart,
   Line,
@@ -8,32 +9,66 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import { formatTimestamp } from './utils';
-import { Series } from './types';
+import { Limitation, Series } from './types';
 import { useChart } from './useChart';
+import { formatTimestamp } from '../utils/date.utils';
+import { limitColor } from './data';
 
 type Props = {
   chartSeries: Series[];
+  limitations?: Limitation[]
 };
 
-export const Chart = ({ chartSeries }: Props) => {
-  const { chartData } = useChart(chartSeries);
+export const Chart = ({ chartSeries, limitations = [] }: Props) => {
+  const { chartData, countPercentage } = useChart(chartSeries);
 
   return (
-    <ResponsiveContainer width={600} height={500}>
+    <ResponsiveContainer width={700} height={500}>
       <LineChart width={600} height={500} data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" tickFormatter={formatTimestamp} />
+        <XAxis   
+          domain={["auto", "auto"]}
+          type="number"
+          dataKey="date" 
+          tickFormatter={formatTimestamp}
+          scale="time"
+        />
         <YAxis />
         <Tooltip />
         <Legend />
+
+        
+        <defs>
+          {limitations.flatMap((e, i) => {
+              let lastOffset = 0;
+              return (
+                <linearGradient key={e.name} id={e.name} x1="0" y1="0" x2="100%" y2="0">
+                    {e.ranges.map((r) => {
+                      const t0 = countPercentage(
+                        r.start + lastOffset,
+                        e.ranges[i - 1]?.end || chartData[0]?.date as number
+                        );
+                        lastOffset = t0 + countPercentage(r.end, r.start);
+                        return (
+                          <React.Fragment key={r.start}>
+                            <stop offset={`${t0}%`} stopColor={e.color} />
+                            <stop offset={`${t0}%`} stopColor={limitColor} />
+                            <stop offset={`${t0 + countPercentage(r.end, r.start)}%`} stopColor={limitColor} />
+                            <stop offset={`${t0 + countPercentage(r.end, r.start)}%`} stopColor={e.color} />
+                        </React.Fragment>
+                        );
+                    })}            
+                </linearGradient>)
+              })}
+          </defs>
+    
         {chartSeries.map((s) => (
           <Line
             connectNulls
             dataKey={s.name}
             name={s.name}
             key={s.name}
-            stroke={s.color}
+            stroke={`url(#${s.name})`}
           />
         ))}
       </LineChart>

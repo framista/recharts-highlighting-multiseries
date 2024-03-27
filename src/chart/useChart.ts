@@ -1,9 +1,16 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Series } from './types';
-import { getCharData } from './utils';
+import { getCharData, getUniqueTimestamps } from './utils';
+import { getDuration } from '../utils/date.utils';
+import { getFirstLast } from '../utils/array.utils';
 
 export const useChart = (chartSeries: Series[]) => {
-  const chartData = useMemo(() => getCharData(chartSeries), []);
+  const uniqueTimestamps = useMemo(() => getUniqueTimestamps(chartSeries), [chartSeries]);
+  const chartData = useMemo(() => getCharData(chartSeries, uniqueTimestamps), [uniqueTimestamps]);
+  const totalDuration = useMemo(() => getDuration(...getFirstLast(uniqueTimestamps)), [uniqueTimestamps])
 
-  return { chartData };
+  const countPercentage = useCallback((end: number, start: number) =>
+    (getDuration(start, end) / totalDuration) * 100 ,[totalDuration]);
+
+  return { chartData, countPercentage };
 };
