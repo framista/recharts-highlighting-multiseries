@@ -1,9 +1,9 @@
 import { sortNumbers } from '../utils/array.utils';
 import { ChartData, Series } from './types';
 
-export const getUniqueTimestamps = (chartSeries: Series[]) : number[] => [...new Set(
+export const getUniqueTimestamps = (chartSeries: Series[]) : number[] => sortNumbers([...new Set(
   chartSeries.flatMap(({ data }) => data.flatMap(({ date }) => date))
-)]
+)])
 
 export const getCharData = (chartSeries: Series[], uniqueTimestamps: number[]): ChartData => {
   const seriesDataRecords: Record<
@@ -20,7 +20,7 @@ export const getCharData = (chartSeries: Series[], uniqueTimestamps: number[]): 
     {}
   );
 
-  const data: ChartData = sortNumbers(uniqueTimestamps).map((date) => {
+  const data: ChartData = uniqueTimestamps.map((date) => {
     const d: ChartData[number] = Object.keys(seriesDataRecords).reduce(
       (p, c) => ({ ...p, [c]: seriesDataRecords[c][date] || null }),
       {}

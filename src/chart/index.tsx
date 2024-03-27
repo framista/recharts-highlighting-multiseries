@@ -39,25 +39,28 @@ export const Chart = ({ chartSeries, limitations = [] }: Props) => {
 
         
         <defs>
-          {limitations.flatMap((e, i) => {
+          {limitations.flatMap((e) => {
               let lastOffset = 0;
               return (
                 <linearGradient key={e.name} id={e.name} x1="0" y1="0" x2="100%" y2="0">
-                    {e.ranges.map((r) => {
+                    {e.ranges.map((r, index) => {
                       const t0 = countPercentage(
-                        r.start + lastOffset,
-                        e.ranges[i - 1]?.end || chartData[0]?.date as number
-                        );
-                        lastOffset = t0 + countPercentage(r.end, r.start);
-                        return (
-                          <React.Fragment key={r.start}>
-                            <stop offset={`${t0}%`} stopColor={e.color} />
-                            <stop offset={`${t0}%`} stopColor={limitColor} />
-                            <stop offset={`${t0 + countPercentage(r.end, r.start)}%`} stopColor={limitColor} />
-                            <stop offset={`${t0 + countPercentage(r.end, r.start)}%`} stopColor={e.color} />
-                        </React.Fragment>
-                        );
+                        r.start,
+                        e.ranges[index - 1]?.end || chartData[0]?.date as number
+                        ) + lastOffset;
+                      const period = countPercentage(r.end, r.start);
+                      lastOffset = t0 + period;
+
+                      return (
+                        <React.Fragment key={r.start}>
+                          <stop offset={`${t0}%`} stopColor={e.color} />
+                          <stop offset={`${t0}%`} stopColor={limitColor} />
+                          <stop offset={`${lastOffset}%`} stopColor={limitColor} />
+                          <stop offset={`${lastOffset}%`} stopColor={e.color} />
+                       </React.Fragment>
+                      );
                     })}            
+                    <stop offset={`100%`} stopColor={e.color} />
                 </linearGradient>)
               })}
           </defs>
@@ -69,6 +72,7 @@ export const Chart = ({ chartSeries, limitations = [] }: Props) => {
             name={s.name}
             key={s.name}
             stroke={`url(#${s.name})`}
+            type="monotone"
           />
         ))}
       </LineChart>
