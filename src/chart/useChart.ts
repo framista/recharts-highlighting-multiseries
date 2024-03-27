@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react';
-import { Series } from './types';
+import { Limitation, Series } from './types';
 import { getCharData, getUniqueTimestamps } from './utils';
 import { getDuration } from '../utils/date.utils';
 import { getFirstLast } from '../utils/array.utils';
 
-export const useChart = (chartSeries: Series[]) => {
-  const uniqueTimestamps = useMemo(() => getUniqueTimestamps(chartSeries), [chartSeries]);
+export const useChart = (chartSeries: Series[], limitations: Limitation[]) => {
+  const uniqueTimestamps = useMemo(() => getUniqueTimestamps(chartSeries, limitations), [chartSeries, limitations]);
   const chartData = useMemo(() => getCharData(chartSeries, uniqueTimestamps), [uniqueTimestamps]);
   const totalDuration = useMemo(() => getDuration(...getFirstLast(uniqueTimestamps)), [uniqueTimestamps])
 

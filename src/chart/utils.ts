@@ -1,8 +1,9 @@
 import { sortNumbers } from '../utils/array.utils';
-import { ChartData, Series } from './types';
+import { ChartData, Limitation, Series } from './types';
 
-export const getUniqueTimestamps = (chartSeries: Series[]) : number[] => sortNumbers([...new Set(
-  chartSeries.flatMap(({ data }) => data.flatMap(({ date }) => date))
+export const getUniqueTimestamps = (chartSeries: Series[], limitations: Limitation[]) : number[] => sortNumbers([...new Set(
+  [...chartSeries.flatMap(({ data }) => data.flatMap(({ date }) => date)),
+    ...limitations.flatMap(({ ranges}) => ranges.flatMap(( { end, start}) =>[end, start] ))]
 )])
 
 export const getCharData = (chartSeries: Series[], uniqueTimestamps: number[]): ChartData => {

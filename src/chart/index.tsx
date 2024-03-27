@@ -20,7 +20,7 @@ type Props = {
 };
 
 export const Chart = ({ chartSeries, limitations = [] }: Props) => {
-  const { chartData, countPercentage } = useChart(chartSeries);
+  const { chartData, countPercentage } = useChart(chartSeries, limitations);
 
   return (
     <ResponsiveContainer width={700} height={500}>
@@ -72,6 +72,7 @@ export const Chart = ({ chartSeries, limitations = [] }: Props) => {
             name={s.name}
             key={s.name}
             stroke={`url(#${s.name})`}
+            strokeWidth={3}
             type="monotone"
           />
         ))}
