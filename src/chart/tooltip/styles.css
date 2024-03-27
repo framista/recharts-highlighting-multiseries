@@ -1,0 +1,30 @@
+.tooltip {
+    background: white;
+    padding: 15px 15px;
+    border-radius: 5px;
+    box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+    font-family: Arial, Helvetica, sans-serif;
+    min-width: 150px;
+}
+
+.tooltip-timestamp {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.tooltip p {
+    margin: 3px 0;
+}
+
+.tooltip-limit {
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23F30000"><path d="M21 8h-8l4-6h-6L3 14h7l-6 9L21 8Z"></path></svg>');
+    min-width: 20px;
+    min-height: 20px;
+}

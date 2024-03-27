@@ -42,7 +42,7 @@ export const limitations: Limitation[] = [
     color: 'navy',
     ranges: [
       { start: new Date(2024, 2, 2).getTime(), end: new Date(2024, 2, 3).getTime() },
-      { start: new Date(2024, 2, 8).getTime(), end: new Date(2024, 2, 11).getTime() },
+      { start: new Date(2024, 2, 10).getTime(), end: new Date(2024, 2, 11).getTime() },
       { start: new Date(2024, 2, 13).getTime(), end: new Date(2024, 2, 14).getTime() },
     ]
   },
@@ -50,7 +50,7 @@ export const limitations: Limitation[] = [
     name: 'Series2',
     color: 'green',
     ranges: [
-      { start: new Date(2024, 2, 4).getTime(), end: new Date(2024, 2, 7).getTime() },
+      { start: new Date(2024, 2, 4).getTime(), end: new Date(2024, 2, 4, 12).getTime() },
       { start: new Date(2024, 2, 12).getTime(), end: new Date(2024, 2, 13).getTime() },
       { start: new Date(2024, 2, 14, 12).getTime(), end: new Date(2024, 2, 15).getTime() },
     ]

@@ -13,6 +13,7 @@ import { Limitation, Series } from './types';
 import { useChart } from './useChart';
 import { formatTimestamp } from '../utils/date.utils';
 import { limitColor } from './data';
+import { CustomizedTooltip } from './tooltip';
 
 type Props = {
   chartSeries: Series[];
@@ -23,8 +24,8 @@ export const Chart = ({ chartSeries, limitations = [] }: Props) => {
   const { chartData, countPercentage } = useChart(chartSeries, limitations);
 
   return (
-    <ResponsiveContainer width={700} height={500}>
-      <LineChart width={600} height={500} data={chartData}>
+    <ResponsiveContainer width={500} height={400}>
+      <LineChart width={500} height={400} data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis   
           domain={["auto", "auto"]}
@@ -34,9 +35,18 @@ export const Chart = ({ chartSeries, limitations = [] }: Props) => {
           scale="time"
         />
         <YAxis />
-        <Tooltip />
+        <Tooltip
+            filterNull={false}
+            content={(x) => (
+              <CustomizedTooltip
+                active={x.active}
+                payload={x.payload}
+                label={x.label}
+                limitations={limitations}
+              />
+            )}
+          />  
         <Legend />
-
         
         <defs>
           {limitations.flatMap((e) => {
@@ -74,6 +84,7 @@ export const Chart = ({ chartSeries, limitations = [] }: Props) => {
             stroke={`url(#${s.name})`}
             strokeWidth={3}
             type="monotone"
+            dot={false}
           />
         ))}
       </LineChart>
